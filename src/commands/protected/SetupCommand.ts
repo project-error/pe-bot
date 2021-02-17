@@ -51,16 +51,16 @@ export default class SetupCommand extends Command {
   }
 
   private static async _setupRules(msg: Message): Promise<Message> {
-    const roleChannel = msg.guild?.channels.cache.get(
+    const ruleChannel = msg.guild?.channels.cache.get(
       <string>process.env.RULE_CHANNEL
     ) as TextChannel;
 
     const embed = new MessageEmbed()
       .setThumbnail('https://i.tasoagc.dev/sD7h')
+      .setColor('DARK_AQUA')
       .setDescription(
         '*Welcome to the Project Error Discord, please read over the following rules before you proceed!*'
       )
-      .setTitle('Guild Rules')
       .setTimestamp()
       .setFooter('Project Error');
 
@@ -68,7 +68,10 @@ export default class SetupCommand extends Command {
       embed.addField(`Rule ${parseInt(rule) + 1}`, RULES[rule], false);
     }
 
-    await roleChannel.send(embed);
+    await ruleChannel.send(
+      'https://cdn.discordapp.com/attachments/659118162150817795/801749773261471764/67347c18c46069d8e68e1830bd9f8b362113a724.png'
+    );
+    await ruleChannel.send(embed);
 
     const success = SetupCommand._makeSuccessEmbed('rules');
     return msg.channel.send(success);

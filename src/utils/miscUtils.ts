@@ -53,3 +53,9 @@ export const makeErrorEmbed = (err: Error, showStack?: boolean): MessageEmbed =>
 
   return embed;
 };
+
+export const makeSimpleEmbed = (message: string): MessageEmbed => {
+  return new MessageEmbed().setColor('GOLD').setDescription(message);
+};
+
+export const convertNanoToMs = (nanoSecs: bigint): number => Number(nanoSecs) / 1e6;

@@ -33,18 +33,8 @@ export default class MessageDeleteListener extends Listener {
     return new MessageEmbed()
       .setTimestamp()
       .setTitle('Edit Event Occured')
-      .setThumbnail(oldMsg.author.displayAvatarURL())
+      .setAuthor(`${oldMsg.author.tag} (${oldMsg.author.id})`, oldMsg.author.displayAvatarURL())
       .addFields([
-        {
-          name: 'Author Tag',
-          value: oldMsg.author.tag,
-          inline: true,
-        },
-        {
-          name: 'Author ID',
-          value: oldMsg.author.id,
-          inline: true,
-        },
         {
           name: 'Original Contents',
           value: discordCodeBlock(oldMsg.content),

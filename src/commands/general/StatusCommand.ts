@@ -3,7 +3,8 @@ import { Message, MessageEmbed } from 'discord.js';
 import { discordCodeBlock, byteToGB, msToFormatted } from '../../utils/miscUtils';
 import sysInfo from 'systeminformation';
 import { Logger } from 'tslog';
-import packJson from '../../../package.json';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const packJson = require('../../../package.json');
 
 export default class StatusCommand extends Command {
   private readonly _logger: Logger;
@@ -40,7 +41,6 @@ export default class StatusCommand extends Command {
       new MessageEmbed()
         .setTitle('PE Guild & Bot Stats')
         .setColor('#00c400')
-        .setImage(<string>msg.guild?.iconURL())
         .setTimestamp()
         .setFooter(msg.author.tag, msg.author.displayAvatarURL())
         // TODO: Reduce reundant code

@@ -1,0 +1,52 @@
+{
+  "name": "pe-bot",
+  "version": "1.0.0",
+  "description": "Bot for project error discord",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --config .prettierrc ./src/**/*.ts  --write",
+    "lint": "eslint ./src --ext .ts ",
+    "dev": "nodemon ./src/index.ts",
+    "dev:debug": "nodemon --inspect ./src/index.ts"
+  },
+  "author": "TasoOneAsia",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^14.14.28",
+    "@typescript-eslint/eslint-plugin": "^4.15.1",
+    "@typescript-eslint/parser": "^4.15.1",
+    "eslint": "^7.20.0",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.5"
+  },
+  "dependencies": {
+    "dayjs": "^1.10.4",
+    "discord-akairo": "^8.1.0",
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
+    "systeminformation": "^5.3.3",
+    "tslog": "^3.0.5",
+    "winston": "^3.3.3"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      ".git",
+      "node_modules"
+    ],
+    "watch": [
+      "src"
+    ],
+    "ext": "ts",
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "execMap": {
+      "ts": "node --require ts-node/register"
+    }
+  }
+}

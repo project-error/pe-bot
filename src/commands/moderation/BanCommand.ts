@@ -8,11 +8,14 @@ import {
   makeErrorEmbed,
   makeSimpleEmbed,
 } from '../../utils';
+import { resolveTime } from '../../utils/typeResolvers';
+import { Dayjs } from 'dayjs';
+import { getBansRepo } from '../../db/repository/BansRepo';
 
 interface IBanAction {
   member: GuildMember;
   reason: string;
-  duration: number | 'perma' | null;
+  unbanDate: Dayjs | 'perma';
 }
 
 export default class BanCommand extends Command {
@@ -40,6 +43,14 @@ export default class BanCommand extends Command {
           },
         },
         {
+          id: 'unbanDate',
+          type: (msg: Message, phrase: string) => resolveTime(phrase),
+          prompt: {
+            start: (msg: Message) => `${msg.author}, provide a valid duration for ban`,
+            retry: (msg: Message) => `${msg.author}, unable to parse that time`,
+          },
+        },
+        {
           id: 'reason',
           match: 'rest',
           default: 'No reason provided',
@@ -55,22 +66,58 @@ export default class BanCommand extends Command {
   // TODO: Cleanup filth
   public async exec(
     msg: Message,
-    { member, duration, reason }: IBanAction
-  ): Promise<Message> {
+    { member, unbanDate, reason }: IBanAction
+  ): Promise<Message | void> {
     try {
-      // if (duration === 'perma') {
+      const banRepo = getBansRepo(this.client.db);
+
+      if (unbanDate === 'perma') {
+        const [dmEmbed, logEmbed] = this._buildEmbeds(
+          msg,
+          member,
+          reason,
+          'Permanently Banned'
+        );
+
+        try {
+          member.send(dmEmbed);
+        } catch (e) {
+          this._logger.error(`Unable to send DM to ${member.user.username}`);
+        }
+        await this._sendToModLog(logEmbed);
+
+        await member.ban({
+          days: 1,
+          reason,
+        });
+
+        await banRepo.createNewBan({
+          perma: true,
+          unbanDate: null,
+          userId: member.user.id,
+          modId: msg.author.id,
+          reason: reason,
+          type: 'ban',
+        });
+
+        return msg.channel.send(
+          makeSimpleEmbed(`**${member.user.tag}** was banned for **${reason}**`)
+        );
+      }
+
       const [dmEmbed, logEmbed] = this._buildEmbeds(
         msg,
         member,
         reason,
-        'Permanently Banned'
+        unbanDate.format('MM/DD/YY')
       );
 
       try {
-        member.send(dmEmbed);
+        await member.send(dmEmbed);
       } catch (e) {
-        this._logger.error(`Unable to send DM to ${member.user.username}`);
+        this._logger.error(`Unable to send direct message to ${member.user.username}`);
       }
+
       await this._sendToModLog(logEmbed);
 
       await member.ban({
@@ -78,36 +125,20 @@ export default class BanCommand extends Command {
         reason,
       });
 
-      return msg.channel.send(
-        makeSimpleEmbed(`**${member.user.tag}** was banned for **${reason}**`)
-      );
-      // }
+      await banRepo.createNewBan({
+        perma: false,
+        unbanDate: unbanDate.toDate(),
+        userId: member.user.id,
+        modId: msg.author.id,
+        reason: reason,
+        type: 'ban',
+      });
 
-      //   if (!duration) return msg.reply('Incorrect date format');
-      //
-      //   const unbanDate = dayjs().add(duration as number, 'ms');
-      //
-      //   const [dmEmbed, logEmbed] = this._buildEmbeds(
-      //     msg,
-      //     member,
-      //     reason,
-      //     unbanDate.format('MM/DD/YY')
-      //   );
-      //
-      //   try {
-      //     await member.send(dmEmbed);
-      //   } catch (e) {
-      //     this._logger.error(`Unable to send direct message to ${member.user.username}`);
-      //   }
-      //
-      //   await this._sendToModLog(logEmbed);
-      //
-      //   await member.ban({
-      //     days: 1,
-      //     reason,
-      //   });
-      //
-      //   return msg.channel.send(unbanDate.format('MM/DD/YY') || 'Perma');
+      const respEmbed = makeSimpleEmbed(
+        `**${msg.author} was banned until ${unbanDate.format('hh:mm on MM/DD/YY')}**`
+      );
+
+      return msg.channel.send(respEmbed);
     } catch (e) {
       this._logger.error(e);
       const errEmbed = makeErrorEmbed(e, false);
@@ -144,7 +175,6 @@ export default class BanCommand extends Command {
       fields: [
         {
           name: 'Unban Date:',
-          // value: `${discordCodeBlock(unbanDate.format('MM/DD/YY') || 'Perma')}`,
           value: `${discordCodeBlock(unbanDate)}`,
           inline: false,
         },

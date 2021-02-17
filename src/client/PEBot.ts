@@ -4,9 +4,12 @@ import path from 'path';
 import { DEFAULT_COOLDOWN, OWNER_IDS, PREFIX } from '../config';
 import { Logger } from 'tslog';
 import { getLogger } from '../utils/logger';
+import {Connection} from "typeorm";
+import connectManager from "../db/connection";
 
 declare module 'discord-akairo' {
   interface AkairoClient {
+    db: Connection
     log: Logger;
     commandHandler: CommandHandler;
     listenerHandler: ListenerHandler;
@@ -14,6 +17,8 @@ declare module 'discord-akairo' {
 }
 
 export default class PEBot extends AkairoClient {
+  public db!: Connection;
+
   public log: Logger;
 
   public listenerHandler: ListenerHandler = new ListenerHandler(this, {
@@ -70,5 +75,15 @@ export default class PEBot extends AkairoClient {
     this.log.info('Loading Listener Handler');
     this.listenerHandler.loadAll();
     this.log.info('Loading Complete');
+
+    this.db = connectManager.get()
+    try {
+      this.log.info('Attempting DB Connect...')
+      await this.db.connect()
+      await this.db.synchronize()
+      this.log.info('DB Connected!')
+    } catch (e) {
+      this.log.error(e)
+    }
   }
 }

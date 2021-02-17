@@ -30,8 +30,11 @@
     "discord-akairo": "^8.1.0",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
+    "pg": "^8.5.1",
+    "reflect-metadata": "^0.1.13",
     "systeminformation": "^5.3.3",
     "tslog": "^3.0.5",
+    "typeorm": "^0.2.31",
     "winston": "^3.3.3"
   },
   "nodemonConfig": {

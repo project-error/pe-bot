@@ -1,5 +1,6 @@
 // FIXME: Types suck here, will improve after functionality
 import { MessageEmbed } from 'discord.js';
+import dayjs, {Dayjs} from "dayjs";
 
 const homeDir = process.cwd().replace(/\\/g, '\\\\');
 
@@ -30,13 +31,6 @@ export const msToFormatted = (ms: number): string => {
   return `${d}d ${h}h ${m}m ${s}s`;
 };
 
-export const parseTimeFromString = (str: string): number | null => {
-  const validTimes: { [key: string]: number } = { m: 60000, h: 3600000, d: 86400000 };
-  const match = str.match(/(-?(?:\d+\.?\d*|\d*\.?\d+)(?:e[-+]?\d+)?)([d,h,m,s])/);
-  if (match && validTimes[match[2]]) return parseInt(match[1]) * validTimes[match[2]];
-  return null;
-};
-
 export const makeErrorEmbed = (err: Error, showStack?: boolean): MessageEmbed => {
   const embed = new MessageEmbed()
     .setColor('RED')
@@ -59,3 +53,19 @@ export const makeSimpleEmbed = (message: string): MessageEmbed => {
 };
 
 export const convertNanoToMs = (nanoSecs: bigint): number => Number(nanoSecs) / 1e6;
+
+export const parseDateFromStr = (str: string): Dayjs | null => {
+  const type = str[str.length - 1]
+  const number = parseInt(str.slice(0, -1))
+  switch (type) {
+    case 'h':
+      return dayjs().add(number, 'hours')
+    case 'd':
+      return dayjs().add(number, 'days')
+    case 'm':
+      return dayjs().add(number, 'months')
+    case 'y':
+      return dayjs().add(number, 'years')
+  }
+  return null
+}

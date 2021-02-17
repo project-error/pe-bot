@@ -21,8 +21,25 @@ export default class HelpCommand extends Command {
     });
   }
 
-  public exec(message: Message, { command }: { command: Command }): Promise<Message> {
+  public exec(
+    message: Message,
+    { command }: { command: Command }
+  ): Promise<Message> | void {
     if (command) {
+      if (
+        command.category.id === 'Debug' &&
+        !this.client.ownerID.includes(message.author.id)
+      ) {
+        this.client.commandHandler.emit(
+          'missingPermissions',
+          message,
+          command,
+          'user',
+          'DebugView'
+        );
+        return;
+      }
+
       return message.channel.send(
         new MessageEmbed()
           .setAuthor(`Command Help | For '${command}'`, message.author.displayAvatarURL())
@@ -67,6 +84,9 @@ export default class HelpCommand extends Command {
 
     for (const category of this.handler.categories.values()) {
       if (['default'].includes(category.id)) continue;
+
+      if (category.id === 'Debug' && !this.client.ownerID.includes(message.author.id))
+        continue;
 
       embed.addField(
         category.id,

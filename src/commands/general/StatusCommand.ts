@@ -11,7 +11,7 @@ export default class StatusCommand extends Command {
   constructor(handler: CommandHandler) {
     super('status', {
       aliases: ['status', 'stats', 'stat'],
-      category: 'Debug',
+      category: 'General',
       description: {
         content: 'Returns stats for Guild and Bot',
         usage: 'status',

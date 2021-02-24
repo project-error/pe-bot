@@ -33,7 +33,10 @@ export default class MessageDeleteListener extends Listener {
     return new MessageEmbed()
       .setTimestamp()
       .setTitle('Edit Event Occured')
-      .setAuthor(`${oldMsg.author.tag} (${oldMsg.author.id})`, oldMsg.author.displayAvatarURL())
+      .setAuthor(
+        `${oldMsg.author.tag} (${oldMsg.author.id})`,
+        oldMsg.author.displayAvatarURL()
+      )
       .addFields([
         {
           name: 'Original Contents',

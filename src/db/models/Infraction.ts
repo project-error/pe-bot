@@ -1,21 +1,21 @@
-import { Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm'
+import { Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 
 export abstract class Infraction {
   @PrimaryGeneratedColumn()
-  infractionID!: number
+  infractionID!: number;
 
   @Column()
-  type!: string
+  type!: string;
 
   @Column()
-  userId!: string
+  userId!: string;
 
   @Column()
-  modId!: string
+  modId!: string;
 
   @Column()
-  reason!: string
+  reason!: string;
 
   @CreateDateColumn()
-  date!: string
+  date!: string;
 }

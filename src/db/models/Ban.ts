@@ -1,19 +1,19 @@
-import {Infraction} from "./Infraction";
-import {Column, Entity} from "typeorm";
+import { Infraction } from './Infraction';
+import { Column, Entity } from 'typeorm';
 
 @Entity()
 export class Ban extends Infraction {
   @Column()
-  type = 'ban'
+  type = 'ban';
 
   @Column({
-    type: "date",
-    nullable: true
+    type: 'date',
+    nullable: true,
   })
-  unbanDate!: Date | null
+  unbanDate!: Date | null;
 
   @Column({
-    default: false
+    default: false,
   })
-  perma!: boolean
+  perma!: boolean;
 }

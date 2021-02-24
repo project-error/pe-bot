@@ -15,7 +15,7 @@
   "devDependencies": {
     "@types/express": "^4.17.11",
     "@types/morgan": "^1.9.2",
-    "@types/node": "^14.14.28",
+    "@types/node": "^14.14.31",
     "@types/ws": "^7.4.0",
     "@typescript-eslint/eslint-plugin": "^4.15.1",
     "@typescript-eslint/parser": "^4.15.1",
@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@types/common-tags": "^1.8.0",
+    "@types/node-fetch": "^2.5.8",
     "body-parser": "^1.19.0",
     "common-tags": "^1.8.0",
     "dayjs": "^1.10.4",
@@ -35,6 +36,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "morgan": "^1.10.0",
+    "node-fetch": "^2.6.1",
     "pg": "^8.5.1",
     "reflect-metadata": "^0.1.13",
     "systeminformation": "^5.3.3",

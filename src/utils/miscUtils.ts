@@ -1,6 +1,6 @@
 // FIXME: Types suck here, will improve after functionality
 import { MessageEmbed } from 'discord.js';
-import dayjs, {Dayjs} from "dayjs";
+import dayjs, { Dayjs } from 'dayjs';
 
 const homeDir = process.cwd().replace(/\\/g, '\\\\');
 
@@ -55,17 +55,17 @@ export const makeSimpleEmbed = (message: string): MessageEmbed => {
 export const convertNanoToMs = (nanoSecs: bigint): number => Number(nanoSecs) / 1e6;
 
 export const parseDateFromStr = (str: string): Dayjs | null => {
-  const type = str[str.length - 1]
-  const number = parseInt(str.slice(0, -1))
+  const type = str[str.length - 1];
+  const number = parseInt(str.slice(0, -1));
   switch (type) {
     case 'h':
-      return dayjs().add(number, 'hours')
+      return dayjs().add(number, 'hours');
     case 'd':
-      return dayjs().add(number, 'days')
+      return dayjs().add(number, 'days');
     case 'm':
-      return dayjs().add(number, 'months')
+      return dayjs().add(number, 'months');
     case 'y':
-      return dayjs().add(number, 'years')
+      return dayjs().add(number, 'years');
   }
-  return null
-}
+  return null;
+};

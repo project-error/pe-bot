@@ -4,12 +4,13 @@ import path from 'path';
 import { DEFAULT_COOLDOWN, OWNER_IDS, PREFIX } from '../config';
 import { Logger } from 'tslog';
 import { getLogger } from '../utils/logger';
-import {Connection} from "typeorm";
-import connectManager from "../db/connection";
+import { Connection } from 'typeorm';
+import connectManager from '../db/connection';
+import { gitKrakenEmitter } from '../express/processRequest';
 
 declare module 'discord-akairo' {
   interface AkairoClient {
-    db: Connection
+    db: Connection;
     log: Logger;
     commandHandler: CommandHandler;
     listenerHandler: ListenerHandler;
@@ -67,6 +68,7 @@ export default class PEBot extends AkairoClient {
     this.listenerHandler.setEmitters({
       commandHandler: this.commandHandler,
       listenerHandler: this.listenerHandler,
+      gitKrakenEmitter,
       process,
     });
 
@@ -76,14 +78,14 @@ export default class PEBot extends AkairoClient {
     this.listenerHandler.loadAll();
     this.log.info('Loading Complete');
 
-    this.db = connectManager.get()
+    this.db = connectManager.get();
     try {
-      this.log.info('Attempting DB Connect...')
-      await this.db.connect()
-      await this.db.synchronize()
-      this.log.info('DB Connected!')
+      this.log.info('Attempting DB Connect...');
+      await this.db.connect();
+      await this.db.synchronize();
+      this.log.info('DB Connected!');
     } catch (e) {
-      this.log.error(e)
+      this.log.error(e);
     }
   }
 }

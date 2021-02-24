@@ -49,7 +49,7 @@ export default class WarnCommand extends Command {
             msg,
             'This was not allowed due to role hierachy'
           );
-          
+
           if(member.id === msg.author.id)
             return WarnCommand._sendErrorMessage(msg, 'You cannot warn yourself.')
 
@@ -71,6 +71,7 @@ export default class WarnCommand extends Command {
               } catch (e) {
                 this._logger.error(`Unable to send DM to ${member.user.username}`);
               }
+              msg.channel.send(makeSimpleEmbed(`**User Warned:** \`User: ${member} \n Reason: ${reason}\``))
             this._sendToModLog(modEmbed)
         } catch(e) {
             msg.channel.send(makeErrorEmbed(e));

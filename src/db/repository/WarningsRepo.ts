@@ -13,5 +13,5 @@ export default class WarningsRepo extends InfractionsRepo<Warning> {
   }
 }
 
-export const getBansRepo = (connection: Connection): WarningsRepo =>
+export const getWarnsRepo = (connection: Connection): WarningsRepo =>
   connection.getCustomRepository(WarningsRepo);

@@ -68,6 +68,14 @@ export default class BanCommand extends Command {
     msg: Message,
     { member, unbanDate, reason }: IBanAction
   ): Promise<Message | void> {
+    const msgAuthor = await msg.guild!.members.fetch(msg.author.id);
+
+    if (member.roles.highest.position >= msgAuthor.roles.highest.position)
+    return BanCommand._sendErrorMessage(
+      msg,
+      'This was not allowed due to role hierachy'
+    );
+
     try {
       const banRepo = getBansRepo(this.client.db);
 
@@ -144,6 +152,10 @@ export default class BanCommand extends Command {
       const errEmbed = makeErrorEmbed(e, false);
       return msg.channel.send(errEmbed);
     }
+  }
+
+  private static async _sendErrorMessage(msg: Message, reason: string): Promise<Message> {
+    return msg.channel.send(makeSimpleEmbed(`**Error:** \`${reason}\``));
   }
 
   private async _sendToModLog(embed: MessageEmbed) {

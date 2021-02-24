@@ -1,13 +1,11 @@
-import dotenv from 'dotenv';
+require('./utils/dotenv');
+import 'reflect-metadata';
 import PEBot from './client/PEBot';
-import path from 'path';
+import { getLogger } from './utils/logger';
+import './express/init';
 
-if (process.env.NODE_ENV === 'development') {
-  const env = dotenv.config({ path: path.resolve('.env.dev') });
-} else {
-  dotenv.config();
-}
+const tempLog = getLogger();
 
 const peBot = new PEBot();
 
-peBot.start();
+peBot.start().catch((e) => tempLog.error(e));

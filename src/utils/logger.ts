@@ -5,7 +5,7 @@ import path from 'path';
 
 export const getLogger = (): Logger => {
   const mainLogger: Logger = new Logger({
-    name: 'Init',
+    name: 'PEBot',
     displayLoggerName: true,
   });
 

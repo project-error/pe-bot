@@ -71,7 +71,7 @@ export default class WarnCommand extends Command {
               } catch (e) {
                 this._logger.error(`Unable to send DM to ${member.user.username}`);
               }
-              msg.channel.send(makeSimpleEmbed(`**User Warned:** \`${member} \n Reason: ${reason}\``))
+              msg.channel.send(makeSimpleEmbed(`**User Warned:** \`${member.user.username} \n Reason: ${reason}\``))
             this._sendToModLog(modEmbed)
         } catch(e) {
             msg.channel.send(makeErrorEmbed(e));

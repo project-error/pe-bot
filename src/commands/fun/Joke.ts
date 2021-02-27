@@ -2,14 +2,14 @@ import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
 import { fetchUrl } from '../../utils/fetch';
 
-export default class RandomJoke extends Command {
+export default class Joke extends Command {
   public constructor() {
-    super('randomjoke', {
-      aliases: ['randomjoke', 'joke', 'jokerandom'],
+    super('joke', {
+      aliases: ['joke', 'randomjoke', 'jokerandom'],
       description: {
         content: 'Fetch a random joke',
-        usage: 'randomjoke',
-        examples: ['randomjoke'],
+        usage: 'joke',
+        examples: ['joke'],
       },
       category: 'Fun',
     });
@@ -18,7 +18,8 @@ export default class RandomJoke extends Command {
     const joke = await fetchUrl('https://official-joke-api.appspot.com/jokes/random');
     const jokeEmbed = new MessageEmbed()
       .setTitle(`So funne men 😂`)
-      .addField(joke.setup, joke.punchline);
+      .addField(joke.setup, joke.punchline)
+      .setColor('ORANGE');
     return message.channel.send(jokeEmbed);
   }
 }

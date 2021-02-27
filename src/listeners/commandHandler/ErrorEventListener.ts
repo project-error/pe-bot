@@ -21,7 +21,7 @@ export default class ErrorEventListener extends Listener {
     await this._sendErrorToLog(e);
     const embed = makeErrorEmbed(e, false);
     await msg.channel.send(embed);
-    this._logger.error(e)
+    this._logger.error(e);
   }
 
   private async _sendErrorToLog(e: Error): Promise<Message> {
@@ -30,6 +30,6 @@ export default class ErrorEventListener extends Listener {
     ) as TextChannel;
     const embed = makeErrorEmbed(e, true);
     return logChannel.send(embed);
-    this._logger.error(e)
+    this._logger.error(e);
   }
 }

@@ -5,4 +5,4 @@ import './express/init';
 
 const peBot = new PEBot();
 
-peBot.start();
+peBot.start().catch(e => console.error(e));

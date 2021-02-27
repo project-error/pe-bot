@@ -27,7 +27,7 @@ export default class BanCommand extends Command {
       aliases: ['ban'],
       description: {
         content: 'Ban a guild member',
-        usage: 'ban <user> [reason]',
+        usage: 'ban <user> <time> [reason]',
         examples: ['ban @Taso noob', 'ban 188181246600282113 noob'],
       },
       category: 'Moderation',
@@ -71,10 +71,10 @@ export default class BanCommand extends Command {
     const msgAuthor = await msg.guild!.members.fetch(msg.author.id);
 
     if (member.roles.highest.position >= msgAuthor.roles.highest.position)
-    return BanCommand._sendErrorMessage(
-      msg,
-      'This was not allowed due to role hierachy'
-    );
+      return BanCommand._sendErrorMessage(
+        msg,
+        'This was not allowed due to role hierachy'
+      );
 
     try {
       const banRepo = getBansRepo(this.client.db);

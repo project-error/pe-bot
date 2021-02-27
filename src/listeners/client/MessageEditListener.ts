@@ -21,6 +21,8 @@ export default class MessageDeleteListener extends Listener {
     if (newMsg.partial || newMsg.author.bot || newMsg.author.id === this.client.user?.id)
       return;
 
+    if (oldMsg.content === newMsg.content) return;
+
     this._logger.info(
       `Edit Event: ${oldMsg.author.tag} (${oldMsg.author.id}), Original: ${oldMsg.content}, New: ${newMsg.content}, Channel: ${oldMsg.channel}`
     );

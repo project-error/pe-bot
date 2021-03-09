@@ -14,7 +14,7 @@ export default class DiceCommand extends Command {
       args: [
         {
           id: 'diceNumber',
-          type: Argument.range('number', 0, 15),
+          type: Argument.range('number', 1, 16),
           match: 'phrase',
           prompt: {
             start: (msg: Message) => `${msg.author}, pick the number of dice (0-15)`,
@@ -25,7 +25,7 @@ export default class DiceCommand extends Command {
         {
           id: 'sideNumber',
           default: 6,
-          type: Argument.range('number', 0, 30),
+          type: Argument.range('number', 1, 31),
           match: 'phrase',
           prompt: {
             start: (msg: Message) =>

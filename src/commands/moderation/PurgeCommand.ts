@@ -1,7 +1,7 @@
 import { GuildMember, Message, MessageEmbed, TextChannel } from 'discord.js';
 import { Command, CommandHandler, Argument } from 'discord-akairo';
 import { Logger } from 'tslog';
-import { makeErrorEmbed, makeSimpleEmbed, modActionEmbed } from '../../utils';
+import { makeErrorEmbed, makeSimpleEmbed } from '../../utils';
 
 interface IPurgeArgs {
   amount: number;
@@ -65,12 +65,25 @@ export default class PurgeCommand extends Command {
           .array()
           .slice(0, amount);
         await (msg.channel as TextChannel).bulkDelete(filteredMsgs);
+        return msg.channel
+          .send(makeSimpleEmbed(`Purged ${filteredMsgs.length} messages`))
+          .then((msg) =>
+            msg.delete({
+              timeout: 3000,
+            })
+          );
         // No member arg
       } else {
         const fetchedMsg = await msg.channel.messages.fetch({ limit: 100 });
         const filteredMsg = fetchedMsg.array().slice(0, amount);
         await (msg.channel as TextChannel).bulkDelete(filteredMsg);
-        return msg.channel.send(makeSimpleEmbed(`Purged ${fetchedMsg.size} messages`));
+        return msg.channel
+          .send(makeSimpleEmbed(`Purged ${filteredMsg.length} messages`))
+          .then((msg) =>
+            msg.delete({
+              timeout: 3000,
+            })
+          );
       }
     } catch (e) {
       this._logger.error(e);

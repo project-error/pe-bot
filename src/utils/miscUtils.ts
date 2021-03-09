@@ -31,6 +31,15 @@ export const msToFormatted = (ms: number): string => {
   return `${d}d ${h}h ${m}m ${s}s`;
 };
 
+export const makeUserErrorEmbed = (err: string): MessageEmbed => {
+  return new MessageEmbed()
+    .setColor('RED')
+    .setTimestamp()
+    .setTitle('❌ Error Encountered ❌')
+    .setDescription(discordCodeBlock(err))
+    .setFooter('Project Error Team')
+}
+
 export const makeErrorEmbed = (err: Error, showStack?: boolean): MessageEmbed => {
   const embed = new MessageEmbed()
     .setColor('RED')

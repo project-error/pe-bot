@@ -1,5 +1,5 @@
 import { AkairoClient, CommandHandler, ListenerHandler } from 'discord-akairo';
-import { Message } from 'discord.js';
+import { Message, MessageEmbed, MessageOptions } from 'discord.js';
 import path from 'path';
 import { DEFAULT_COOLDOWN, OWNER_IDS, PREFIX } from '../config';
 import { Logger } from 'tslog';
@@ -7,6 +7,8 @@ import { getLogger } from '../utils/logger';
 import { Connection } from 'typeorm';
 import connectManager from '../db/connection';
 import { gitKrakenEmitter } from '../express/processRequest';
+import StickyMessageService from '../services/StickyMessageService';
+import { makeSimpleEmbed } from '../utils';
 
 declare module 'discord-akairo' {
   interface AkairoClient {
@@ -14,6 +16,7 @@ declare module 'discord-akairo' {
     log: Logger;
     commandHandler: CommandHandler;
     listenerHandler: ListenerHandler;
+    StickyService: StickyMessageService;
   }
 }
 
@@ -22,9 +25,12 @@ export default class PEBot extends AkairoClient {
 
   public log: Logger;
 
+  public StickyService: StickyMessageService;
+
   public listenerHandler: ListenerHandler = new ListenerHandler(this, {
     directory: path.join(__dirname, '..', 'listeners'),
   });
+
   public commandHandler: CommandHandler = new CommandHandler(this, {
     directory: path.join(__dirname, '..', 'commands'),
     prefix: PREFIX,
@@ -35,12 +41,34 @@ export default class PEBot extends AkairoClient {
     defaultCooldown: DEFAULT_COOLDOWN,
     argumentDefaults: {
       prompt: {
-        modifyStart: (_: Message, str: string): string =>
-          `${str}\n\nType \`cancel\` to cancel the commmand...`,
-        modifyRetry: (_: Message, str: string): string =>
-          `${str}\n\nType \`cancel\` to cancel the commmand...`,
-        timeout: 'Command timedout',
-        ended: 'You reached the maximum retries, command cancelled.',
+        modifyStart: (msg: Message, str: string): MessageOptions => {
+          const embed = new MessageEmbed()
+            .setColor('RANDOM')
+            .setDescription(str)
+            .setFooter(
+              `Type \`cancel\` to cancel the command or ${this.commandHandler.prefix}help [command]`,
+              msg.author.displayAvatarURL()
+            );
+          return { embed };
+        },
+        modifyRetry: (msg: Message, str: string): MessageOptions => {
+          const embed = new MessageEmbed()
+            .setColor('RANDOM')
+            .setDescription(str)
+            .setFooter(
+              `Type \`cancel\` to cancel the command or ${this.commandHandler.prefix}help [command]`,
+              msg.author.displayAvatarURL()
+            );
+          return { embed };
+        },
+        timeout: () => makeSimpleEmbed(`Timed out!`),
+        ended: (msg: Message) => {
+          const embed = new MessageEmbed()
+            .setDescription('You have reached the maximum retries')
+            .setColor('RED')
+            .setFooter('Project Error', msg.author.displayAvatarURL());
+          return { embed };
+        },
         retries: 3,
         time: 3e4,
       },
@@ -54,6 +82,7 @@ export default class PEBot extends AkairoClient {
       ownerID: OWNER_IDS,
     });
     this.log = getLogger();
+    this.StickyService = new StickyMessageService(this.log);
   }
 
   public async start(): Promise<void> {

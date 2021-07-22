@@ -68,9 +68,7 @@ export default class SetupCommand extends Command {
       embed.addField(`Rule ${parseInt(rule) + 1}`, RULES[rule], false);
     }
 
-    await ruleChannel.send(
-      'https://cdn.discordapp.com/attachments/659118162150817795/801749773261471764/67347c18c46069d8e68e1830bd9f8b362113a724.png'
-    );
+    await ruleChannel.send('https://i.tasoagc.dev/SUiD');
     await ruleChannel.send(embed);
 
     const success = SetupCommand._makeSuccessEmbed('rules');

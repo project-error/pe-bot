@@ -15,10 +15,10 @@ export default class Joke extends Command {
     });
   }
   async exec(message: Message): Promise<Message> {
-    const joke = await fetchUrl('https://official-joke-api.appspot.com/jokes/random');
+    const joke = await fetchUrl('https://v2.jokeapi.dev/joke/Miscellaneous,Dark?blacklistFlags=religious,political,racist,sexist&type=twopart');
     const jokeEmbed = new MessageEmbed()
-      .setTitle(`So funne men 😂`)
-      .addField(joke.setup, joke.punchline)
+      .setTitle(`Funny mey mey 😂`)
+      .addField(joke.setup, joke.delivery)
       .setColor('ORANGE');
     return message.channel.send(jokeEmbed);
   }

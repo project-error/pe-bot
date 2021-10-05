@@ -3,3 +3,4 @@ node_modules
 logs
 .env.dev
 dist
+.idea

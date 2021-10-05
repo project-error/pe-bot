@@ -4,7 +4,7 @@
   "description": "Bot for project error discord",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -b",
     "format": "prettier --config .prettierrc ./src/**/*.ts  --write",
     "lint": "eslint ./src --ext .ts ",
     "dev": "nodemon ./src/index.ts",

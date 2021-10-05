@@ -1,0 +1,24 @@
+version:  '3.1'
+
+services:
+  discord_bot:
+    build:
+      context: .
+    depends_on:
+      - db
+    restart: unless-stopped
+  db:
+    image: postgres
+    volumes:
+      - ./.docker/postgres-data:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - "4000:8080"
+

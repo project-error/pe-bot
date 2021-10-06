@@ -1,6 +1,6 @@
 import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
-import { EightBallResponses } from '../../Config';
+import { EightBallResponses } from '../../config';
 import { stripIndents } from 'common-tags';
 
 export default class EightBallCommand extends Command {

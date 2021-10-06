@@ -15,11 +15,11 @@ export default class Joke extends Command {
     });
   }
   async exec(message: Message): Promise<Message> {
-    const joke = await fetchUrl('https://v2.jokeapi.dev/joke/Any?type=twopart');
+    const joke = await fetchUrl('https://v2.jokeapi.dev/joke/Miscellaneous,Dark');
     
     const jokeEmbed = new MessageEmbed()
       .setTitle(`Funny mey mey 😂`)
-      .addField(joke.setup, joke.delivery)
+      .addField(joke.setup ?? joke.joke, joke.delivery ?? null)
       .setColor('ORANGE');
     
     return message.channel.send(jokeEmbed);

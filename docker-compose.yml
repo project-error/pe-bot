@@ -1,7 +1,8 @@
 version:  '3.1'
 
 services:
-  discord_bot:
+  core:
+    container_name: pe-db_core
     build:
       context: .
     depends_on:
@@ -9,6 +10,7 @@ services:
     restart: unless-stopped
   db:
     image: postgres
+    container_name: pe-bot_pg
     volumes:
       - ./.docker/postgres-data:/var/lib/postgresql/data
     restart: always
@@ -17,6 +19,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
   adminer:
+    container_name: pe-bot_adminer
     image: adminer
     restart: unless-stopped
     ports:

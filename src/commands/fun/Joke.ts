@@ -15,13 +15,13 @@ export default class Joke extends Command {
     });
   }
   async exec(message: Message): Promise<Message> {
-    const joke = await fetchUrl('https://v2.jokeapi.dev/joke/Miscellaneous,Dark');
-    
+    const joke = await fetchUrl('https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,religious,political,racist,sexist');
+
     const jokeEmbed = new MessageEmbed()
-      .setTitle(`Funny mey mey 😂`)
-      .addField(joke.setup ?? joke.joke, joke.delivery ?? null)
+      .setTitle(`(not) Funny mey mey 😂`)
+      .addField(joke.setup ?? joke.joke, joke.delivery ?? '')
       .setColor('ORANGE');
-    
+
     return message.channel.send(jokeEmbed);
   }
 }

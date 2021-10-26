@@ -1,5 +1,5 @@
 // FIXME: Types suck here, will improve after functionality
-import { MessageEmbed } from 'discord.js';
+import { ColorResolvable, MessageEmbed } from 'discord.js';
 import dayjs, { Dayjs } from 'dayjs';
 
 const homeDir = process.cwd().replace(/\\/g, '\\\\');
@@ -37,8 +37,8 @@ export const makeUserErrorEmbed = (err: string): MessageEmbed => {
     .setTimestamp()
     .setTitle('❌ Error Encountered ❌')
     .setDescription(discordCodeBlock(err))
-    .setFooter('Project Error Team')
-}
+    .setFooter('Project Error Team');
+};
 
 export const makeErrorEmbed = (err: Error, showStack?: boolean): MessageEmbed => {
   const embed = new MessageEmbed()
@@ -57,8 +57,11 @@ export const makeErrorEmbed = (err: Error, showStack?: boolean): MessageEmbed =>
   return embed;
 };
 
-export const makeSimpleEmbed = (message: string): MessageEmbed => {
-  return new MessageEmbed().setColor('GOLD').setDescription(message);
+export const makeSimpleEmbed = (
+  message: string,
+  color: ColorResolvable = 'RANDOM'
+): MessageEmbed => {
+  return new MessageEmbed().setColor(color).setDescription(message);
 };
 
 export const convertNanoToMs = (nanoSecs: bigint): number => Number(nanoSecs) / 1e6;

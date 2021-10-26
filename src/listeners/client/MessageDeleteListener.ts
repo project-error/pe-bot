@@ -1,7 +1,7 @@
 import { Listener, ListenerHandler } from 'discord-akairo';
 import { Message, TextChannel, MessageEmbed } from 'discord.js';
 import { Logger } from 'tslog';
-import { discordCodeBlock } from '../../utils/miscUtils';
+import { discordCodeBlock } from '../../utils';
 
 export default class MessageDeleteListener extends Listener {
   private _logger: Logger;
@@ -59,9 +59,9 @@ export default class MessageDeleteListener extends Listener {
     if (!process.env.LOG_CHANNEL_ID)
       throw new Error('LOG_CHANNEL_ID Env variable not defined');
 
-    const channel = this.client.channels.cache.get(
+    const channel = (await this.client.channels.fetch(
       <string>process.env.LOG_CHANNEL_ID
-    ) as TextChannel;
+    )) as TextChannel;
     try {
       await channel.send(embed);
     } catch (e) {

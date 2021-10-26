@@ -1,7 +1,8 @@
-import { GuildMember, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { GuildMember, Message, TextChannel } from 'discord.js';
 import { Command, CommandHandler, Argument } from 'discord-akairo';
 import { Logger } from 'tslog';
-import { makeErrorEmbed, makeSimpleEmbed } from '../../utils';
+import { makeSimpleEmbed } from '../../utils';
+import dayjs from 'dayjs';
 
 interface IPurgeArgs {
   amount: number;
@@ -9,7 +10,7 @@ interface IPurgeArgs {
 }
 
 export default class PurgeCommand extends Command {
-  private _logger: Logger;
+  private log: Logger;
   public constructor(handler: CommandHandler) {
     super('purge', {
       aliases: ['purge', 'delete', 'clear'],
@@ -44,7 +45,7 @@ export default class PurgeCommand extends Command {
       ],
     });
 
-    this._logger = handler.client.log.getChildLogger({
+    this.log = handler.client.log.getChildLogger({
       name: 'PurgeCmd',
       prefix: ['PurgeCmd'],
     });
@@ -53,55 +54,47 @@ export default class PurgeCommand extends Command {
     msg: Message,
     { amount, member }: IPurgeArgs
   ): Promise<Message | void> {
-    try {
-      // Execute if provide member arg
-      if (member) {
-        const fetchedMsg = await msg.channel.messages.fetch({ limit: 100 });
-        const filteredMsgs = fetchedMsg
-          .filter(
-            (m: Message) =>
-              m.author.id === member.id && Date.now() - m.createdTimestamp < 1209600000
-          )
-          .array()
-          .slice(0, amount);
-        await (msg.channel as TextChannel).bulkDelete(filteredMsgs);
-        return msg.channel
-          .send(makeSimpleEmbed(`Purged ${filteredMsgs.length} messages`))
-          .then((msg) =>
-            msg.delete({
-              timeout: 3000,
-            })
-          );
-        // No member arg
-      } else {
-        const fetchedMsg = await msg.channel.messages.fetch({ limit: 100 });
-        const filteredMsg = fetchedMsg.array().slice(0, amount);
-        await (msg.channel as TextChannel).bulkDelete(filteredMsg);
-        return msg.channel
-          .send(makeSimpleEmbed(`Purged ${filteredMsg.length} messages`))
-          .then((msg) =>
-            msg.delete({
-              timeout: 3000,
-            })
-          );
-      }
-    } catch (e) {
-      this._logger.error(e);
-      return msg.channel.send(makeErrorEmbed(e));
-    }
-  }
+    // Execute if provide member arg
+    if (member) {
+      const fetchedMsgs = await msg.channel.messages.fetch({ limit: 100 });
 
-  private async _sendToModLog(embed: MessageEmbed) {
-    if (!process.env.ADMIN_LOG_CHANNEL_ID)
-      throw new Error('ADMIN_LOG_CHANNEL_ID Env variable not defined');
+      fetchedMsgs.delete(msg.id);
 
-    const channel = this.client.channels.cache.get(
-      <string>process.env.ADMIN_LOG_CHANNEL_ID
-    ) as TextChannel;
-    try {
-      await channel.send(embed);
-    } catch (e) {
-      this._logger.error(e);
+      const filteredMsgs = fetchedMsgs
+        .filter(
+          (m: Message) =>
+            m.author.id === member.id &&
+            m.createdTimestamp > dayjs().subtract(14, 'd').unix()
+        )
+        .array()
+        .slice(0, amount);
+
+      await (msg.channel as TextChannel).bulkDelete(filteredMsgs);
+
+      const sentReply = await msg.channel.send(
+        makeSimpleEmbed(`Purged ${filteredMsgs.length} messages`)
+      );
+      await sentReply.delete({ timeout: 5000 }).catch();
+
+      return await msg.delete().catch();
     }
+    const fetchedMsgs = await msg.channel.messages.fetch({ limit: 100 });
+
+    fetchedMsgs.delete(msg.id);
+
+    const filteredMsgs = fetchedMsgs
+      .filter((m) => m.createdTimestamp > dayjs().subtract(14, 'd').unix())
+      .array()
+      .slice(0, amount);
+
+    await (msg.channel as TextChannel).bulkDelete(filteredMsgs);
+
+    const sentReply = await msg.channel.send(
+      makeSimpleEmbed(`Purged ${filteredMsgs.length} messages`)
+    );
+
+    await sentReply.delete({ timeout: 5000 }).catch();
+
+    return await msg.delete().catch();
   }
 }

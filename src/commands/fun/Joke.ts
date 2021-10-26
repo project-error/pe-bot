@@ -2,6 +2,12 @@ import { Command } from 'discord-akairo';
 import { Message, MessageEmbed } from 'discord.js';
 import { fetchUrl } from '../../utils/fetch';
 
+interface JokeResp {
+  setup?: string;
+  joke: string;
+  delivery?: string;
+}
+
 export default class Joke extends Command {
   public constructor() {
     super('joke', {
@@ -15,7 +21,9 @@ export default class Joke extends Command {
     });
   }
   async exec(message: Message): Promise<Message> {
-    const joke = await fetchUrl('https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,religious,political,racist,sexist');
+    const joke = await fetchUrl<JokeResp>(
+      'https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,religious,political,racist,sexist'
+    );
 
     const jokeEmbed = new MessageEmbed()
       .setTitle(`(not) Funny mey mey 😂`)

@@ -5,6 +5,8 @@ services:
     container_name: pe-db_core
     build:
       context: .
+    env_file:
+      - .env
     depends_on:
       - db
     restart: unless-stopped

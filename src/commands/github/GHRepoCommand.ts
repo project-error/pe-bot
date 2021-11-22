@@ -18,6 +18,7 @@ export default class GHRepoCommand extends Command {
 
   constructor(handler: CommandHandler) {
     super('gh-repo', {
+      category: 'Github',
       channel: 'guild',
       args: [
         {

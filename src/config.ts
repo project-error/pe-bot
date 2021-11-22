@@ -46,3 +46,5 @@ export const EightBallResponses = [
   'Yes - definitely',
   'You may rely on it',
 ];
+
+export const LatestCommandInterval = 10 * 60000;

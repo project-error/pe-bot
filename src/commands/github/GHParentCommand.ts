@@ -3,6 +3,11 @@ import { Command, Flag } from 'discord-akairo';
 export default class GHParentCommand extends Command {
   constructor() {
     super('github', {
+      description: {
+        content: 'Github subcommands',
+        usage: 'gh [repo/issue/pr]',
+        example: 'gh repo npwd',
+      },
       aliases: ['github', 'gh'],
       channel: 'guild',
     });

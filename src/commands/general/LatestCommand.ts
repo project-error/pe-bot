@@ -55,6 +55,7 @@ export default class LatestCommand extends Command {
         examples: ['latest'],
       },
       channel: 'guild',
+
       args: [
         {
           id: 'full',

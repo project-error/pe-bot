@@ -1,5 +1,4 @@
 import express from 'express';
-import bodyParser from 'body-parser';
 import gitKrakenRoutes from './webhook';
 import { Logger } from 'tslog';
 import morgan from 'morgan';
@@ -11,7 +10,8 @@ const app = express();
 
 app.use(morgan('dev'));
 
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(gitKrakenRoutes);
 

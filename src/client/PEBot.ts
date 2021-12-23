@@ -103,6 +103,7 @@ export default class PEBot extends AkairoClient {
       commandHandler: this.commandHandler,
       listenerHandler: this.listenerHandler,
       gitKrakenEmitter,
+      kofiEmitter,
       process,
     });
 

@@ -8,8 +8,10 @@ import {
 } from '../utils/gitkraken/emittedEvents';
 
 class GitKrakenEmitter extends EventEmitter {}
+class KofiEmitter extends EventEmitter {}
 
 export const gitKrakenEmitter = new GitKrakenEmitter();
+export const kofiEmitter = new KofiEmitter();
 
 export function emitEventReducer(
   type: EventClass,

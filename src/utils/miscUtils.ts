@@ -57,6 +57,9 @@ export const makeErrorEmbed = (err: Error, showStack?: boolean): MessageEmbed =>
   return embed;
 };
 
+// eslint-disable-next-line
+export const noop = () => {};
+
 export const makeSimpleEmbed = (
   message: string,
   color: ColorResolvable = 'RANDOM'

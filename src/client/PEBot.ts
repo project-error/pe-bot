@@ -6,9 +6,10 @@ import { Logger } from 'tslog';
 import { getLogger } from '../utils/logger';
 import { Connection } from 'typeorm';
 import connectManager from '../db/connection';
-import { gitKrakenEmitter } from '../express/processRequest';
+import { gitKrakenEmitter, kofiEmitter } from '../express/processRequest';
 import StickyMessageService from '../services/StickyMessageService';
 import { makeSimpleEmbed } from '../utils';
+import { ManagerHandler } from '../structures/managers/ManagerHandler';
 
 declare module 'discord-akairo' {
   interface AkairoClient {
@@ -77,6 +78,10 @@ export default class PEBot extends AkairoClient {
     ignorePermissions: OWNER_IDS,
   });
 
+  public managerHandler = new ManagerHandler(this, {
+    directory: path.join(__dirname, 'managers'),
+  });
+
   public constructor() {
     super({
       ownerID: OWNER_IDS,
@@ -105,6 +110,8 @@ export default class PEBot extends AkairoClient {
     this.commandHandler.loadAll();
     this.log.info('Loading Listener Handler');
     this.listenerHandler.loadAll();
+    this.log.info('Loading Manager Handler');
+    this.managerHandler.loadAll();
     this.log.info('Loading Complete');
 
     this.db = connectManager.get();

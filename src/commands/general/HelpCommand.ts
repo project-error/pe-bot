@@ -88,6 +88,12 @@ export default class HelpCommand extends Command {
       if (category.id === 'Debug' && !this.client.ownerID.includes(message.author.id))
         continue;
 
+      if (
+        category.id === 'Admin' &&
+        !message.member?.roles.cache.has(<string>process.env.ADMIN_ROLE)
+      )
+        continue;
+
       embed.addField(
         category.id,
         category

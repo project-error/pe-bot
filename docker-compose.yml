@@ -10,6 +10,8 @@ services:
     depends_on:
       - db
     restart: unless-stopped
+    ports:
+      - "3000:3000"
   db:
     image: postgres
     container_name: pe-bot_pg

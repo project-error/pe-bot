@@ -5,7 +5,7 @@ import morgan from 'morgan';
 
 const tempLogger = new Logger();
 
-const port = process.env.EXPRESS_PORT ?? 1500;
+const port = process.env.EXPRESS_PORT ?? 3000;
 const app = express();
 
 app.use(morgan('dev'));

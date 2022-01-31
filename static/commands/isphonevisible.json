@@ -1,5 +1,4 @@
 {
-  "aliases": ["isphonevisible"],
   "replyMsg": "You downloaded the source code and didn’t build.\nPlease download from the release tab and **be sure** you download the npwd.zip as this is the built version: *https://github.com/project-error/npwd/releases*\nIf you want to modify the source code please see the documentation page for building: *https://projecterror.dev/docs/npwd/dev/dev_bootstrap*",
   "description": "No such export isPhoneVisible"
 }

@@ -1,5 +1,4 @@
 {
-  "aliases": ["newplayer"],
   "replyMsg": "This export is only available when the `useResourceIntegration` is set to true.\n Read here: https://github.com/project-error/npwd/blob/fc2a905f0fd85db797b716053b8f0d4398b8bd61/config.json#L8",
   "description": "No such export: newPlayer in resource npwd"
 }

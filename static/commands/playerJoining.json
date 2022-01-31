@@ -1,5 +1,4 @@
 {
-  "aliases": ["playerjoining"],
   "replyMsg": "You need to update your artifacts to a version beyond `3622`. Don’t know your artifact version? Type `version` into your console.\nClick the link for the latest version.\nhttps://runtime.fivem.net/artifacts/fivem/build_server_windows/master/?",
   "description": "Event playerJoining was not safe for net"
 }

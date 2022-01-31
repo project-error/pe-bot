@@ -1,4 +1,5 @@
 {
+  "aliases": [],
   "replyMsg": "Please confirm that your error looks like the following: `https://i.imgur.com/IIM0vEd.png`\nIf your error is in the correct format, read below.\n**- You did not configure the `config.json` properly.**\n*Please read the configuration documentation again: https://projecterror.dev/docs/npwd/start/installation/#basic-configuration*\n**You do not have a users table where you store player's identifiers.**\n*As of v1.04, NPWD doesn't generate one.*\n*You will need to install pe-core: https://github.com/project-error/pe-core*\n**You do not have a phone_number column.**\n*See the sql file for an example query.*",
   "description": "Cannot read properties of undefined (reading 'phone_number')"
 }
